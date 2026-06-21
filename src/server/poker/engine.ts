@@ -93,8 +93,7 @@ export class PokerGame {
       return player.holeCards;
     }
 
-    const shouldShowAtShowdown = this.street === "complete" && player.status !== "folded" && player.status !== "out";
-    return shouldShowAtShowdown ? player.holeCards : [];
+    return [];
   }
 
   startNextHand(): GameState {

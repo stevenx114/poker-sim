@@ -13,4 +13,14 @@ describe("PokerGame client state", () => {
     expect(opponents).toHaveLength(1);
     expect(opponents[0].holeCards).toHaveLength(0);
   });
+
+  it("keeps opponent hole cards hidden after the hand is complete", () => {
+    const game = new PokerGame({ playerCount: 2 });
+    const state = game.performHumanAction({ kind: "fold" });
+    const opponents = state.players.filter((player) => !player.isHuman);
+
+    expect(state.street).toBe("complete");
+    expect(opponents).toHaveLength(1);
+    expect(opponents[0].holeCards).toHaveLength(0);
+  });
 });
