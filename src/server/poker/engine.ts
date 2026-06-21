@@ -72,7 +72,10 @@ export class PokerGame {
       dealerSeatId: this.players[this.dealerIndex]?.id ?? this.players[0].id,
       activeSeatId: this.activeSeatId,
       street: this.street,
-      players: this.players,
+      players: this.players.map((player) => ({
+        ...player,
+        holeCards: this.visibleHoleCardsForClient(player)
+      })),
       communityCards: this.communityCards,
       deckRemaining: this.deck.length,
       currentBet: this.currentBet,
@@ -83,6 +86,15 @@ export class PokerGame {
       winners: this.winners,
       actionLog: this.actionLog.slice(-120)
     });
+  }
+
+  private visibleHoleCardsForClient(player: PlayerState): Card[] {
+    if (player.isHuman) {
+      return player.holeCards;
+    }
+
+    const shouldShowAtShowdown = this.street === "complete" && player.status !== "folded" && player.status !== "out";
+    return shouldShowAtShowdown ? player.holeCards : [];
   }
 
   startNextHand(): GameState {

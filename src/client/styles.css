@@ -241,6 +241,14 @@ button.warning {
   font-size: 0.75rem;
 }
 
+.playing-card.back {
+  border: 2px solid rgba(255, 255, 255, 0.62);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16) 25%, transparent 25%) 0 0 / 12px 12px,
+    linear-gradient(225deg, rgba(255, 255, 255, 0.16) 25%, transparent 25%) 0 0 / 12px 12px,
+    linear-gradient(145deg, #1d4ed8, #172554);
+}
+
 .playing-card.compact {
   width: 42px;
   height: 58px;

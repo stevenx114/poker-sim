@@ -278,6 +278,7 @@ function Seat({ player, totalSeats, isActive }: { player: PlayerState; totalSeat
   const angle = (player.seat / totalSeats) * Math.PI * 2 - Math.PI / 2;
   const radiusX = 43;
   const radiusY = 39;
+  const showHiddenCards = !player.isHuman && player.holeCards.length === 0 && player.status !== "folded" && player.status !== "out";
   const style = {
     left: `${50 + Math.cos(angle) * radiusX}%`,
     top: `${50 + Math.sin(angle) * radiusY}%`
@@ -290,9 +291,9 @@ function Seat({ player, totalSeats, isActive }: { player: PlayerState; totalSeat
         {player.isDealer ? <span className="dealer">D</span> : null}
       </div>
       <div className="mini-cards">
-        {player.holeCards.map((card, index) => (
-          <PlayingCard key={`${player.id}-${index}`} card={card} compact />
-        ))}
+        {showHiddenCards
+          ? [0, 1].map((index) => <PlayingCard key={`${player.id}-hidden-${index}`} compact faceDown />)
+          : player.holeCards.map((card, index) => <PlayingCard key={`${player.id}-${index}`} card={card} compact />)}
       </div>
       <div className="seat-stats">
         <span>Stack {player.stack}</span>
@@ -326,7 +327,21 @@ function ActionButton({
   );
 }
 
-function PlayingCard({ card, placeholder, compact = false }: { card?: Card; placeholder?: string; compact?: boolean }) {
+function PlayingCard({
+  card,
+  placeholder,
+  compact = false,
+  faceDown = false
+}: {
+  card?: Card;
+  placeholder?: string;
+  compact?: boolean;
+  faceDown?: boolean;
+}) {
+  if (faceDown) {
+    return <div className={`playing-card back ${compact ? "compact" : ""}`} aria-label="Hidden card" />;
+  }
+
   if (!card) {
     return <div className={`playing-card empty ${compact ? "compact" : ""}`}>{placeholder ?? ""}</div>;
   }
